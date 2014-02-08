@@ -1,17 +1,24 @@
 <!-- Drag and drop based from @remy's HTML5 demos: https://github.com/remy/html5demos -->
 
-<title>File API</title>
+<title>shapefile-to-webmap</title>
 <style>
-#holder { border: 10px dashed #ccc; width: 300px; height: 300px; margin: 20px auto;}
+#holder { border: 10px dashed gray; width: 300px; height: 300px; margin: 20px auto;}
 #holder.hover { border: 10px dashed #333; }
+body { background-color: #99CCFF; }
+#text { width: 300px; height: 300px; margin: auto; }
 </style>
 
+<body>
+  <article>
+    <div id="holder"></div>
+    <div id="text">
+      <p id="status">Sorry! Your web browser isn't supported. Try downloading the (free and awesome) <a href="http://www.google.com/chrome">Google Chrome</a> browser.</p>
+      <p>Drag a shapefile (.zip) from your desktop into the box above to generate a web map!</p>
+    </div>
+  </article>
 
-<article>
-  <div id="holder"></div> 
-  <p id="status">File API &amp; FileReader API not supported</p>
-  <p>Drag an image from your desktop on to the drop zone above to see the browser read the contents of the file and use it as the background - without uploading the file to any servers.</p>
-</article>
+  <a href="https://github.com/daguar/shapefile-to-webmap"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+</body>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="js/shp.min.js"></script>
@@ -26,7 +33,7 @@ if (typeof window.FileReader === 'undefined') {
   state.className = 'fail';
 } else {
   state.className = 'success';
-  state.innerHTML = 'File API & FileReader available';
+  state.innerHTML = '';
 }
  
 holder.ondragover = function () { this.className = 'hover'; return false; };
