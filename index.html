@@ -1,0 +1,82 @@
+<!-- Drag and drop based from @remy's HTML5 demos: https://github.com/remy/html5demos -->
+
+<title>File API</title>
+<style>
+#holder { border: 10px dashed #ccc; width: 300px; height: 300px; margin: 20px auto;}
+#holder.hover { border: 10px dashed #333; }
+</style>
+
+
+<article>
+  <div id="holder"></div> 
+  <p id="status">File API &amp; FileReader API not supported</p>
+  <p>Drag an image from your desktop on to the drop zone above to see the browser read the contents of the file and use it as the background - without uploading the file to any servers.</p>
+</article>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script>
+var holder = document.getElementById('holder'),
+    state = document.getElementById('status');
+
+var error, geojson;
+
+if (typeof window.FileReader === 'undefined') {
+  state.className = 'fail';
+} else {
+  state.className = 'success';
+  state.innerHTML = 'File API & FileReader available';
+}
+ 
+holder.ondragover = function () { this.className = 'hover'; return false; };
+holder.ondragend = function () { this.className = ''; return false; };
+
+// Main workhorse: on file drop
+holder.ondrop = function (e) {
+  this.className = '';
+  e.preventDefault();
+  console.log(e);
+
+  var file = e.dataTransfer.files[0],
+      reader = new FileReader();
+
+  // On success, forward the data on to GeoJson.io
+  function successHandler(data) {
+    console.log("success");
+    geojson = data;
+    url = "http://geojson.io/#data=data:application/json," + encodeURIComponent(JSON.stringify(data));
+    window.location = url;
+    console.log(data);
+  }
+  
+  // On error, hoist the error for inspection
+  function errorHandler(req, returned_error) {
+    error = returned_error;
+    console.log(returned_error);
+  }
+
+  reader.onload = function (event) {
+    var formData = new FormData();
+    formData.append("upload", file);
+    // Tried setting output projection, per Ben Balter, because ESRI files not showing up right:
+    // http://ben.balter.com/2013/06/26/how-to-convert-shapefiles-to-geojson-for-use-on-github/
+    formData.append("targetSrs", "crs:84");
+    $.ajax({
+      url: "http://ogre.adc4gis.com/convert",
+      type: 'POST',
+      success: successHandler,
+      error: errorHandler,
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false
+    });
+  };
+
+  console.log(file);
+  reader.readAsDataURL(file);
+
+  return false;
+};
+
+</script>
