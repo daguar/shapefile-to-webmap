@@ -14,6 +14,7 @@
 </article>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="js/shp.min.js"></script>
 
 <script>
 var holder = document.getElementById('holder'),
@@ -35,7 +36,6 @@ holder.ondragend = function () { this.className = ''; return false; };
 holder.ondrop = function (e) {
   this.className = '';
   e.preventDefault();
-  console.log(e);
 
   var file = e.dataTransfer.files[0],
       reader = new FileReader();
@@ -56,25 +56,12 @@ holder.ondrop = function (e) {
   }
 
   reader.onload = function (event) {
-    var formData = new FormData();
-    formData.append("upload", file);
-    // Tried setting output projection, per Ben Balter, because ESRI files not showing up right:
-    // http://ben.balter.com/2013/06/26/how-to-convert-shapefiles-to-geojson-for-use-on-github/
-    formData.append("targetSrs", "crs:84");
-    $.ajax({
-      url: "http://ogre.adc4gis.com/convert",
-      type: 'POST',
-      success: successHandler,
-      error: errorHandler,
-      data: formData,
-      cache: false,
-      contentType: false,
-      processData: false
-    });
+    console.log("made it to onload");
+    shp(this.result).then(successHandler);//function(geojson){console.log(geojson)});
   };
 
-  console.log(file);
-  reader.readAsDataURL(file);
+  console.log("pre-read")
+  reader.readAsArrayBuffer(file);
 
   return false;
 };
