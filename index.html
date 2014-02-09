@@ -64,7 +64,7 @@ holder.ondrop = function (e) {
 
   reader.onload = function (event) {
     console.log("made it to onload");
-    shp(this.result).then(successHandler);//function(geojson){console.log(geojson)});
+    shp(this.result).then(successHandler);
   };
 
   console.log("pre-read")
