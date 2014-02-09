@@ -11,4 +11,4 @@ Really, this is just a piping together of three technologies:
 2. @calvinmetcalf's shapefile-js (https://github.com/calvinmetcalf/shapefile-js)
 3. @mapbox's GeoJSON.io (http://geojson.io/)
 
-Copyright 2014 Dave Guarino, MIT License
+Copyright 2014 Dave Guarino, MIT License (see shapefile-js site for exceptions in dependencies)
